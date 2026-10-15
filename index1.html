@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: sans-serif;
+            overflow: hidden; /* Zapobiega pojawianiu się pasków przewijania */
+        }
+        div {
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        /* Iframe rozciągnięty na pełny ekran */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #lockButton {
+            pointer-events: auto; /* Ensures the button itself remains clickable */
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            width :100%;
+            height:100%;
+            opacity:0%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10; /* Gwarantuje, że przycisk jest na samej górze i przechwytuje kliknięcia */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <!-- Poprawiono domknięcie cudzysłowu src oraz dodano atrybuty fullscreen/autoplay -->
+         <iframe width="1203" height="789" src="https://www.youtube.com/embed/JwNk4NtUVew?autoplay=1&volume=10&controls=0" title="Quit your bitchin&#39; nigger - Johnny Rebel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen autoplay=1&volume=10&controls=0&cc_load_policy=1&cc_lang_pref=ar&hl=ar" title="Quit your bitchin&#39; nigger - Johnny Rebel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen " allow="autoplay; fullscreen"></iframe>
+    </div>
+
+    <button id="lockButton">Click to Lock Mouse</button>
+
+    <script>
+        const lockButton = document.getElementById('lockButton');
+
+        // 1. Request Pointer Lock on click
+        lockButton.addEventListener('click', () => {
+            document.body.requestPointerLock();
+        });
+
+        // 2. Monitor lock status changes
+        document.addEventListener('pointerlockchange', () => {
+            if (document.pointerLockElement === document.body) {
+                lockButton.textContent = "Mouse Locked! Press Ctrl + Shift + X to unlock.";
+                lockButton.style.backgroundColor = "#dc3545";
+            } else {
+                lockButton.textContent = "Click to Lock Mouse";
+                lockButton.style.backgroundColor = "#007bff";
+            }
+        });
+
+        // 3. Listen for custom shortcut to unlock (Ctrl + Shift + X)
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'x') {
+                if (document.pointerLockElement === document.body) {
+                    document.exitPointerLock();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
